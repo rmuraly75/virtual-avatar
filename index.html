@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Avatar</title>
+    <style>
+        #avatar-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 300px;
+            height: 400px;
+            z-index: 1000;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="avatar-container">
+        <video id="avatar-video" controls autoplay></video>
+    </div>
+
+    <script>
+        function updateVideoSource(videoUrl) {
+            var videoElement = document.getElementById('avatar-video');
+            if (videoElement) {
+                videoElement.src = videoUrl;
+                videoElement.play();
+            }
+        }
+
+        async function fetchAndUpdateVideo(threadId, userInput) {
+            const response = await fetch('https://your-replit-url/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ thread_id: threadId, message: userInput })
+            });
+            const data = await response.json();
+            if (data.video_url) {
+                updateVideoSource(data.video_url);
+            } else {
+                console.error('Failed to get video URL:', data.error);
+            }
+        }
+
+        // Example usage: replace with actual logic to call fetchAndUpdateVideo
+        // fetchAndUpdateVideo('your-thread-id', 'Hello');
+    </script>
+</body>
+</html>
